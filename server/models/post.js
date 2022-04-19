@@ -19,13 +19,31 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Post.init({
-    location: DataTypes.STRING,
+    location: {
+      type :DataTypes.STRING,
+      allowNull: false,
+      validate:{
+        notEmpty:{
+          args:true,
+          msg:'Please enter an location'
+        },
+        notNull:{
+          args:true,
+          msg:'Please enter an location'
+        },
+      }
+    },
     imageUrl: DataTypes.STRING,
     description: DataTypes.STRING,
     payment: DataTypes.INTEGER,
     category: DataTypes.STRING,
     userId: DataTypes.INTEGER
   }, {
+    hooks:{
+      beforeCreate: (post) => {
+        post.payment = 0
+      }
+    },
     sequelize,
     modelName: 'Post',
   });
