@@ -20,11 +20,11 @@ module.exports = {
       payment: {
         type: Sequelize.INTEGER
       },
-      category: {
+      emailPost: {
         type: Sequelize.STRING
       },
-      userId: {
-        type: Sequelize.INTEGER
+      category: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

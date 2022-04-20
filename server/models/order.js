@@ -11,12 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Order.belongsTo(models.User, {
-        foreignKey: "customerId",
-        as: "user",
+        foreignKey: "userId",
       });
       Order.belongsTo(models.Post, {
         foreignKey: "postId",
-        as: "post",
       });
     }
   }
@@ -24,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     location: DataTypes.STRING,
     message: DataTypes.STRING,
     status: DataTypes.STRING,
-    customerId: DataTypes.INTEGER,
+    emailPost: DataTypes.STRING,
+    userId: DataTypes.INTEGER,
     postId: DataTypes.INTEGER
   }, {
     sequelize,

@@ -3,14 +3,7 @@ const {User,Order,Post} = require('../models/index');
 class postController{
   static async getAllpost(req, res,next){
     try {
-      const posts = await Post.findAll({
-        include: [
-          {
-            model: User,
-            as: "user",
-          },
-        ],
-      });
+      const posts = await Post.findAll();
       if (!posts) {
         next({
           name: "notFound",
@@ -20,6 +13,7 @@ class postController{
         res.status(200).json(posts);
       }
     } catch (error) {
+      console.log("error: ", error);
       next(error);
     }
   }
@@ -28,12 +22,15 @@ class postController{
       location: req.body.location,
       description: req.body.description,
       category: req.body.category,
-      userId: req.user.id
+      emailPost: req.user.email,
+      imageUrl: req.body.imageUrl
     };
+    console.log(newData);
     try {
       const post = await Post.create(newData);
       res.status(201).json(post);
     } catch (error) {
+      console.log("error: ", error);
       next(error);
     }
   }

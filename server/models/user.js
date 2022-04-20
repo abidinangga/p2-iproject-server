@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.belongsToMany(models.Post,{
         through: models.Order,
-        foreignKey:"customerId",
-        as: "user"
+        foreignKey:"userId"
       })
     }
   }

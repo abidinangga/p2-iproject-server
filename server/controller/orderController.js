@@ -1,48 +1,31 @@
 const {User,Order,Post} = require('../models/index');
-
+const Xendit = require('xendit-node');
 
 class orderController{
-  static addOrder(req,res,next){
+  static async addOrder(req,res,next){
+    try {
+    const response= await Post.findOne({
+      where:{
+        id: req.params.postId
+      }
+    })
+    const resUser = await User.findOne({
+      where:{id: req.user.id}
+    })
     let newData = {
       location: req.body.location,
       message: req.body.message,
-      status: "Await",
-      customerId: req.user.id,
+      emailPost: response.emailPost,
+      status: "Waiting",
+      userId: req.user.id,
       postId: req.params.postId
-    };
-    try {
-      const orders = Order.create(newData);
-      res.status(201).json(orders);
-    } catch (error) {
-      next(error);
     }
-  }
-  static async orderDetail(req,res,next){
-    let id = req.params.id;
-    try {
-      const orders = await Order.findOne({
-        where: {
-          id: id
-        },
-        include: [
-          {
-            model: User,
-            as: "user",
-          },
-          {
-            model: Post,
-            as: "post",
-          }
-        ]
-      });
-      if (!orders) {
-        next({
-          name: "notFound",
-          message: "Order not Found",
-        });
-      } else {
-        res.status(200).json(orders);
-      }
+    // let email ={
+    //   emailPost: response.emailPost,
+    //   emailUser: resUser.email,
+    // }
+    const orders = await Order.create(newData);
+    res.status(201).json(orders);
     } catch (error) {
       next(error);
     }
@@ -64,12 +47,30 @@ class orderController{
           message: "Order not Found",
         });
       } else {
-        res.status(200).json(orders);
+        res.status(200).json({
+          message: "Order updated status",
+          status: status
+        });
       }
     } catch (error) {
       next(error);
     }
   }
+  static async xenditByOrder(req,res,next){
+    try {
+      const x = new Xendit({ secretKey:process.env.PUBLIC_KEY_XENDIT});
+      const { Invoice } = x;
+      const i = new Invoice();
+      const resp = await i.createInvoice({
+        external_id: 'payment-link-example',
+        amount: 180000,
+        description: 'Invoice Demo #123',
+        invoice_duration: 86400,
+      })
+      } catch (error) {
+      next(error)
+      }
+    }
 }
 
 module.exports = orderController;

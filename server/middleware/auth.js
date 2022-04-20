@@ -12,6 +12,7 @@ function authentication(req, res, next) {
             id: data.id,
             role: data.role,
             username: data.username,
+            email:data.email
           };
           next();
         } else {
@@ -33,7 +34,7 @@ function authentication(req, res, next) {
 }
 
 function authorization(req, res, next) {
-  const id = +req.params.id;
+  const id = req.user.id;
   User.findByPk(id)
     .then((data) => {
       if (data) {

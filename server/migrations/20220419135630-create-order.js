@@ -17,7 +17,10 @@ module.exports = {
       status: {
         type: Sequelize.STRING
       },
-      customerId: {
+      emailPost:{
+        type: Sequelize.STRING
+      },
+      userId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',

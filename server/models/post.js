@@ -13,8 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Post.belongsToMany(models.User,{
         through: models.Order,
-        foreignKey:"postId",
-        as: "post"
+        foreignKey:"postId"
       })
     }
   }
@@ -36,8 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     imageUrl: DataTypes.STRING,
     description: DataTypes.STRING,
     payment: DataTypes.INTEGER,
+    emailPost: DataTypes.STRING,
     category: DataTypes.STRING,
-    userId: DataTypes.INTEGER
   }, {
     hooks:{
       beforeCreate: (post) => {

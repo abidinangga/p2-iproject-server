@@ -16,20 +16,13 @@ class UserController {
       } else {
         if (comparePassword(password, user.password)) {
           const payload = {
-            id: user.id,
-            role: user.role,
-            email: user.email,
-            username: user.username,
+            id: user.id
           };
           const access_token = jwtSign(payload);
           res
             .status(200)
             .json({
               access_token: access_token,
-              id: user.id,
-              role: user.role,
-              email: user.email,
-              username: user.username,
             });
         } else {
           next({
@@ -39,6 +32,7 @@ class UserController {
         }
       }
     } catch (error) {
+      console.log("error: ", error);
       next(error);
     }
   }
@@ -47,7 +41,7 @@ class UserController {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      role: "Admin"
+      role: "Customer"
     };
     try {
       const users = await User.create(newData);

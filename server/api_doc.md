@@ -2,4 +2,4 @@
 // mapbox
 // nodemiler
 //longitude latitude
-//status pending  on proccess done
+//status waiting on proccess done
