@@ -25,12 +25,31 @@ class postController{
       emailPost: req.user.email,
       imageUrl: req.body.imageUrl
     };
-    console.log(newData);
     try {
       const post = await Post.create(newData);
       res.status(201).json(post);
     } catch (error) {
       console.log("error: ", error);
+      next(error);
+    }
+  }
+  static async getPost(req,res,next){
+    let id = req.params.id;
+    try {
+      const post = await Post.findOne({
+        where: {
+          id: id
+        }
+      });
+      if (!post) {
+        next({
+          name: "notFound",
+          message: "Post not Found",
+        });
+      } else {
+        res.status(200).json(post);
+      }
+    } catch (error) {
       next(error);
     }
   }

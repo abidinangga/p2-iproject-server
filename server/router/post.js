@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", Controller.getAllpost);
 router.use(authentication)
+router.get("/:id", Controller.getPost);
 router.post('/add',authorization, Controller.addPost)
 router.delete('/delete/:id', authorization, Controller.deletePost)
 

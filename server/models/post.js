@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks:{
       beforeCreate: (post) => {
-        post.payment = 0
+        post.payment = 50000
       }
     },
     sequelize,
