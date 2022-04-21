@@ -25,11 +25,11 @@ class postController{
       emailPost: req.user.email,
       imageUrl: req.body.imageUrl
     };
+    console.log(newData);
     try {
       const post = await Post.create(newData);
       res.status(201).json(post);
     } catch (error) {
-      console.log("error: ", error);
       next(error);
     }
   }

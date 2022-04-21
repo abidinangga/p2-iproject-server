@@ -119,7 +119,7 @@ class orderController{
           redirect_url: transaction.redirect_url
       })
   } catch (error) {
-      console.log(error);
+      next(error)
   }
 }
 }
