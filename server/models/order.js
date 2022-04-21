@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     postId: DataTypes.INTEGER
   }, {
+    hooks:{
+
+    },
     sequelize,
     modelName: 'Order',
   });

@@ -1,7 +1,7 @@
 const {User,Order,Post} = require('../models/index');
 const Xendit = require('xendit-node');
 const nodemailer = require("nodemailer");
-
+const {snap} =require('../helper/midtrans')
 class orderController{
   static async addOrder(req,res,next){
     try {
@@ -21,11 +21,8 @@ class orderController{
       userId: req.user.id,
       postId: req.params.postId
     }
-    let email ={
-      emailPost: response.emailPost,
-      emailUser: resUser.email,
-    }
-    .then(() => {
+      let emailPost = response.emailPost
+      let emailUser = resUser.email
       const transporter = nodemailer.createTransport({
         service: "hotmail",
         auth: {
@@ -33,19 +30,28 @@ class orderController{
           pass: "Berandal89",
         },
       });
-      let option = {
+      let option1 = {
         from: "dairypost@outlook.com",
-        to: `${email}`,
-        subject: "Registration Success!",
-        text: `Welcome to the jungle, ${username}!`,
+        to: `${emailPost}`,
+        subject: "Ada yang Order, cek aplikasi Anda",
+        text: `Welcome to the jungle!`,
       };
-      transporter.sendMail(option, (err, info) => {
+      let option2 = {
+        from: "dairypost@outlook.com",
+        to: `${emailUser}`,
+        subject: "selamat anda berasil membuat orderan",
+        text: `Welcome to the jungle!`,
+      };
+       transporter.sendMail(option1, (err, info) => {
         if (err) {
           return;
         }
       });
-    })
-
+       transporter.sendMail(option2, (err, info) => {
+        if (err) {
+          return;
+        }
+      });
     const orders = await Order.create(newData);
     res.status(201).json(orders);
     } catch (error) {
@@ -97,21 +103,26 @@ class orderController{
       next(error);
     }
   }
-  static async xenditByOrder(req,res,next){
+  static async midtransByOrder(req,res,next){
     try {
-      const x = new Xendit({ secretKey:process.env.PUBLIC_KEY_XENDIT});
-      const { Invoice } = x;
-      const i = new Invoice();
-      const resp = await i.createInvoice({
-        external_id: 'payment-link-example',
-        amount: 180000,
-        description: 'bayar jasa',
-        invoice_duration: 86400,
+      let parameter = {
+          transaction_details: {
+              order_id: Math.floor(Math.random() * 100000),
+              gross_amount: 50000
+          }, credit_card:{
+              secure : true
+          }
+      };
+      const transaction = await snap.createTransaction(parameter)
+      res.status(201).json({
+          token: transaction.token,
+          redirect_url: transaction.redirect_url
       })
-      } catch (error) {
-      next(error)
-      }
-    }
+  } catch (error) {
+      console.log(error);
+  }
 }
+}
+
 
 module.exports = orderController;
