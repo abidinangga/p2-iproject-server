@@ -52,5 +52,5 @@ const ImageKit = (req,res,next) =>{
         })
     }
 }
-  
+
 module.exports=ImageKit

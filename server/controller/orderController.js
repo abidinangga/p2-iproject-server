@@ -23,7 +23,7 @@ class orderController{
     }
       let emailPost = response.emailPost
       let emailUser = resUser.email
-      const transporter = nodemailer.createTransport({
+      const transporter = await nodemailer.createTransport({
         service: "hotmail",
         auth: {
           user: "dairypost@outlook.com",
@@ -42,12 +42,12 @@ class orderController{
         subject: "selamat anda berasil membuat orderan",
         text: `Welcome to the jungle!`,
       };
-       transporter.sendMail(option1, (err, info) => {
+     let info1 = await  transporter.sendMail(option1, (err, info) => {
         if (err) {
           return;
         }
       });
-       transporter.sendMail(option2, (err, info) => {
+      let info2 = await transporter.sendMail(option2, (err, info) => {
         if (err) {
           return;
         }
